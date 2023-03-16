@@ -68,26 +68,16 @@ class Formula{
             else if (isOperator(currentChar)){
                 output.append(currentChar);
                 nestedParens--;
-            }
-            else if (currentChar == ')'){
+            } else if (currentChar == ')'){
                 boolean nestedParensExist = nestedParens > 0;
                 boolean nextCharIsClosingParen = ((i + 1) < expression.length()) && (expression.charAt(i + 1) == ')');
-                if (nestedParensExist) {
-                    if (i < expression.length() - 1) {
-                        if (expression.charAt(i + 1) == ')') {
-                            output.deleteCharAt(output.lastIndexOf("("));
-                            nestedParens--;
-                        }
-                    }
+                if (nestedParensExist && nextCharIsClosingParen) {
+                    output.deleteCharAt(output.lastIndexOf("("));
+                    nestedParens--;
                 }
                 else {
                     output.append(")");
-                    continue;
                 }
-                if (i < expression.length() - 1)
-                    if (expression.charAt(i + 1) != ')'){
-                        output.append(")");
-                    }
             }
             else {
                 output.append(currentChar);
