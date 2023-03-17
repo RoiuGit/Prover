@@ -1,28 +1,39 @@
 import java.util.Objects;
 
 public class Formula {
+    private final String expression;
     private String sign;
     private Formula antecedent;
     private Formula consequent;
     private int signIndex;
     private boolean isAtomicFormula;
-    private final String expression;
 
     Formula(String expression) {
         this.expression = expression;
         sign = "";
         evaluate(normalize(expression));
-        if (Objects.equals(sign, "") || Objects.equals(sign, "~")){
+        if (Objects.equals(sign, "") || Objects.equals(sign, "~")) {
             isAtomicFormula = true;
         }
-        if (Objects.equals(sign, "")){
+        if (Objects.equals(sign, "")) {
             signIndex = 0;
             antecedent = this;
         }
-        if (Objects.equals(sign, "~")){
+        if (Objects.equals(sign, "~")) {
             signIndex = 0;
             antecedent = new Formula(expression.substring(1));
         }
+    }
+
+    private static String normalize(String expression) {
+        expression = expression.toUpperCase();
+        expression = removeExcessParentheses(expression);
+        return expression;
+    }
+
+    private static String removeExcessParentheses(String expression) {
+        //To-do: implement
+        return expression;
     }
 
     private void evaluate(String expression) {
@@ -49,7 +60,7 @@ public class Formula {
                     }
                 }
                 case 'v' -> {
-                    if (openParens == 0 && !Objects.equals(sign, "~")){
+                    if (openParens == 0 && !Objects.equals(sign, "~")) {
                         sign = "v";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex));
@@ -57,7 +68,7 @@ public class Formula {
                     }
                 }
                 case '~' -> {
-                    if (openParens < 1 && !Objects.equals(sign, "~")){
+                    if (openParens < 1 && !Objects.equals(sign, "~")) {
                         sign = "~";
                     }
                 }
@@ -65,16 +76,6 @@ public class Formula {
         }
     }
 
-    private static String normalize(String expression) {
-        expression = expression.toUpperCase();
-        expression = removeExcessParentheses(expression);
-        return expression;
-    }
-
-    private static String removeExcessParentheses(String expression) {
-    //To-do: implement
-    return expression;
-    }
     public String getSign() {
         return sign;
     }
@@ -107,8 +108,7 @@ public class Formula {
 
     @Override
     public String toString() {
-        if (isAtomicFormula)
-            return expression;
+        if (isAtomicFormula) return expression;
         else return "(" + antecedent + sign + consequent + ")";
     }
 }

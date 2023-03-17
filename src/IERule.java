@@ -2,10 +2,11 @@ import java.util.List;
 
 public class IERule extends Rule {
 
-    IERule(){
+    IERule() {
         numPremises = 2;
         ruleName = "IE";
     }
+
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
         if (premises.size() != numPremises) return null;

@@ -2,16 +2,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Proof {
-    List<Formula> formulaList;
     private final int assumptionDepth;
-    List<Formula> premises;
     private final int startingIndex;
-    private int endingIndex;
-    private boolean isClosed;
+    List<Formula> formulaList;
+    List<Formula> premises;
     List<Proof> subProofList = new ArrayList<>();
     Proof subProof;
+    private int endingIndex;
+    private boolean isClosed;
 
-    Proof(List<Formula> formulaList, int assumptionDepth, int startingIndex){
+    Proof(List<Formula> formulaList, int assumptionDepth, int startingIndex) {
         premises = new ArrayList<>();
         premises.addAll(formulaList);
         this.formulaList = new ArrayList<>();
@@ -21,32 +21,35 @@ public class Proof {
         this.assumptionDepth = assumptionDepth;
         isClosed = false;
     }
-    Proof(int assumptionDepth, int startingIndex){
+
+    Proof(int assumptionDepth, int startingIndex) {
         formulaList = new ArrayList<>();
         this.startingIndex = startingIndex;
         endingIndex = startingIndex - 1;
         this.assumptionDepth = assumptionDepth;
         isClosed = false;
     }
-    public void append(Formula formula){
+
+    public void append(Formula formula) {
         formulaList.add(formula);
         endingIndex++;
-        if (subProof != null && subProof.isNotClosed()){
+        if (subProof != null && subProof.isNotClosed()) {
             subProof.append(formula);
         }
     }
-    public Formula getFormula(int index){
+
+    public Formula getFormula(int index) {
         return formulaList.get(index);
     }
 
-    public void assume(Formula assumption){
+    public void assume(Formula assumption) {
         addSubProof();
         append(assumption);
     }
 
-    public String getResult(){
+    public String getResult() {
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < premises.size() - 1; i++){
+        for (int i = 0; i < premises.size() - 1; i++) {
             result.append(premises.get(i).toString()).append(", ");
         }
         if (!premises.isEmpty()) result.append(premises.get(premises.size() - 1).toString()).append(" ");
@@ -66,9 +69,10 @@ public class Proof {
         return depth;
     }
 
-    public int getAssumptionDepth(){
+    public int getAssumptionDepth() {
         return assumptionDepth;
     }
+
     public boolean belongsToClosedProof(int lineNumber) {
         for (Proof subProof : subProofList) {
             if (lineNumber >= subProof.getStartingIndex() && lineNumber <= subProof.getEndingIndex()) {
@@ -82,30 +86,37 @@ public class Proof {
         return false;
     }
 
-    public Proof getSubProof(){
+    public Proof getSubProof() {
         return subProof;
     }
-    public void addSubProof(){
+
+    public void addSubProof() {
         if (subProof != null && subProof.isNotClosed()) subProof.addSubProof();
         else {
             subProof = new Proof(assumptionDepth + 1, endingIndex + 1);
             subProofList.add(subProof);
         }
     }
-    public void close(){
+
+    public void close() {
         isClosed = true;
     }
 
-    public boolean isNotClosed(){
+    public boolean isNotClosed() {
         return !isClosed;
     }
-    public int getStartingIndex(){
+
+    public int getStartingIndex() {
         return startingIndex;
     }
-    public int getEndingIndex(){
+
+    public int getEndingIndex() {
         return endingIndex;
     }
-    public int size(){ return formulaList.size();}
+
+    public int size() {
+        return formulaList.size();
+    }
 
     public String toString() {
         StringBuilder proof = new StringBuilder();
