@@ -4,10 +4,11 @@ import java.util.Objects;
 public class CE2Rule extends Rule{
 
     CE2Rule(){
-        this.numPremises = 1;
+        numPremises = 1;
+        ruleName = "CE2";
     }
     @Override
-    public Formula applyRule(List<Formula> premises) {
+    public Formula applyRule(List<Formula> premises, Proof proof) {
         if (premises.size() != numPremises) return null;
         Formula conjunction = premises.get(0);
         if (Objects.equals(conjunction.getSign(), "&"))
@@ -18,5 +19,9 @@ public class CE2Rule extends Rule{
     @Override
     public int getNumPremises() {
         return numPremises;
+    }
+    @Override
+    public String getRuleName() {
+        return ruleName;
     }
 }

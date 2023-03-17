@@ -7,14 +7,18 @@ public class NaturalDeduction {
 
     NaturalDeduction() {
         ruleMap = new HashMap<>();
-        ruleMap.put("IE", new IERule());
-        ruleMap.put("CE1", new CE1Rule());
-        ruleMap.put("CE2", new CE2Rule());
+        putRule(new IERule());
+        putRule(new CE1Rule());
+        putRule(new CE2Rule());
+        putRule(new IIRule());
     }
 
-    public Formula applyRule(String rule, List<Formula> premises) {
+    private void putRule(Rule rule){
+        this.ruleMap.put(rule.getRuleName(), rule);
+    }
+    public Formula applyRule(String rule, List<Formula> premises, Proof proof) {
         Rule ruleInstance = ruleMap.get(rule.toUpperCase());
-        Formula result = ruleInstance.applyRule(premises);
+        Formula result = ruleInstance.applyRule(premises, proof);
         if (result != null) {
             return result;
         } else {

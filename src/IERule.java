@@ -3,10 +3,11 @@ import java.util.List;
 public class IERule extends Rule {
 
     IERule(){
-        this.numPremises = 2;
+        numPremises = 2;
+        ruleName = "IE";
     }
     @Override
-    public Formula applyRule(List<Formula> premises) {
+    public Formula applyRule(List<Formula> premises, Proof proof) {
         if (premises.size() != numPremises) return null;
 
         Formula implication = premises.get(0);
@@ -22,5 +23,10 @@ public class IERule extends Rule {
     @Override
     public int getNumPremises() {
         return numPremises;
+    }
+
+    @Override
+    public String getRuleName() {
+        return ruleName;
     }
 }

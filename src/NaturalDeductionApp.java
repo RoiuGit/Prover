@@ -21,10 +21,9 @@ public class NaturalDeductionApp {
         Formula result;
         String rule;
         while(true) {
-
             premises.clear();
             System.out.println(proof);
-            System.out.print("Enter the rule you want to apply, or enter \"END\" to end proof: ");
+            System.out.print("Enter the rule you want to apply, enter \"ASSUME\" to add an assumption, or enter \"END\" to end proof: ");
             rule = scn.nextLine();
 
             if (rule.equalsIgnoreCase("END")){
@@ -33,13 +32,17 @@ public class NaturalDeductionApp {
                 break;
             }
 
+            if (rule.equalsIgnoreCase("ASSUME")){
+                System.out.print("Enter the assumption: ");
+                proof.assume(new Formula(scn.nextLine()));
+                continue;
+            }
             for (int i = 0; i < nd.getNumPremises(rule); i++) {
                 System.out.print("Enter the index of premise " + (i + 1) + ": ");
-                premises.add(proof.getFormula(Integer.parseInt(scn.nextLine())));
+                premises.add(proof.getFormula(Integer.parseInt(scn.nextLine()) - proof.getStartingIndex()));
             }
 
-            nd.applyRule(rule, premises);
-            result = nd.applyRule(rule, premises);
+            result = nd.applyRule(rule, premises, proof);
             proof.append(result);
         }
     }
