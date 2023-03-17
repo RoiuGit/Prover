@@ -40,7 +40,7 @@ public class Formula {
                     if (openParens == 0) {
                         sign = "&";
                         signIndex = i;
-                        antecedent = new Formula(expression.substring(1, signIndex - 1));
+                        antecedent = new Formula(expression.substring(1, signIndex));
                         consequent = new Formula(expression.substring(signIndex + 1, expression.length() - 1));
                     }
                 }

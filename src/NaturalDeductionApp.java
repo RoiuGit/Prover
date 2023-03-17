@@ -18,6 +18,8 @@ public class NaturalDeductionApp {
         }
         System.out.print("Enter the rule you want to apply: ");
         String rule = scn.nextLine();
-        System.out.println(nd.applyRule(rule, premises).toString());
+        Formula result = nd.applyRule(rule, premises);
+        if (result != null)
+            System.out.println(result);
     }
 }

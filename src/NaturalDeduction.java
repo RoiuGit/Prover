@@ -1,25 +1,23 @@
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NaturalDeduction {
-    private final IERule ie;
-    private final CE1Rule ce1;
-    private final CE2Rule ce2;
+    private final Map<String, Rule> ruleMap;
 
     NaturalDeduction() {
-        this.ie = new IERule();
-        this.ce1 = new CE1Rule();
-        this.ce2 = new CE2Rule();
+        ruleMap = new HashMap<>();
+        ruleMap.put("IE", new IERule());
+        ruleMap.put("CE1", new CE1Rule());
+        ruleMap.put("CE2", new CE2Rule());
     }
+
     public Formula applyRule(String rule, List<Formula> premises) {
-        Formula result = switch (rule) {
-            case "IE" -> ie.applyRule(premises);
-            case "ce1" -> ce1.applyRule(premises);
-            case "ce2" -> ce2.applyRule(premises);
-            default -> null;
-        };
-        if (result != null)
+        Rule ruleInstance = ruleMap.get(rule.toUpperCase());
+        Formula result = ruleInstance.applyRule(premises);
+        if (result != null) {
             return result;
-        else {
+        } else {
             System.out.println("Couldn't apply rule " + rule);
             return null;
         }
