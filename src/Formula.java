@@ -12,7 +12,7 @@ public class Formula {
         this.expression = expression;
         sign = "";
         evaluate(normalize(expression));
-        if (Objects.equals(sign, "")){
+        if (Objects.equals(sign, "") || Objects.equals(sign, "~")){
             isAtomicFormula = true;
         }
         if (isAtomicFormula){
@@ -55,27 +55,10 @@ public class Formula {
     }
 
     private static String removeExcessParentheses(String expression) {
-        StringBuilder output = new StringBuilder();
-        int openParens = 0;
-        for (int i = 0; i < expression.length(); i++) {
-            char currentChar = expression.charAt(i);
-            if (currentChar == '(') {
-                openParens++;
-                output.append("(");
-            } else if (isOperator(currentChar)) {
-                output.append(currentChar);
-                openParens--;
-            } else if (currentChar == ')') {
-                boolean nestedParensExist = openParens > 0;
-                boolean nextCharIsClosingParen = ((i + 1) < expression.length()) && (expression.charAt(i + 1) == ')');
-                if (nestedParensExist && nextCharIsClosingParen) {
-                    output.deleteCharAt(output.lastIndexOf("("));
-                    openParens--;
-                } else output.append(")");
-            } else output.append(currentChar);
-        }
-        return output.toString();
+    //To-do: implement
+    return expression;
     }
+
 
     private static boolean isOperator(char o) {
         return o == '&' || o == '>';

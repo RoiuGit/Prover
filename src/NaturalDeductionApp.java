@@ -16,8 +16,7 @@ public class NaturalDeductionApp {
             System.out.print("Enter premise " + (i + 1) + ": ");
             premises.add(new Formula(scn.nextLine()));
         }
-
-        Proof proof = new Proof(premises);
+        Proof proof = new Proof(premises, 0, 1);
         Formula result;
         String rule;
         while(true) {
@@ -28,7 +27,7 @@ public class NaturalDeductionApp {
 
             if (rule.equalsIgnoreCase("END")){
                 System.out.println(proof);
-                System.out.println(proof.getResult(numPremises));
+                System.out.println(proof.getResult());
                 break;
             }
 

@@ -3,39 +3,35 @@ import java.util.List;
 
 public class Proof {
     List<Formula> formulaList;
-    protected int assumptionDepth;
-    final protected int numPremises;
-    protected int startingIndex;
-    protected int endingIndex;
-    protected boolean isClosed;
-    List<SubProof> subProofList = new ArrayList<>();
+    private final int assumptionDepth;
+    List<Formula> premises;
+    private final int startingIndex;
+    private int endingIndex;
+    private boolean isClosed;
+    List<Proof> subProofList = new ArrayList<>();
+    Proof subProof;
 
-    SubProof subProof;
-
-    Proof(List<Formula> formulaList){
-        numPremises = formulaList.size();
+    Proof(List<Formula> formulaList, int assumptionDepth, int startingIndex){
+        premises = new ArrayList<>();
+        premises.addAll(formulaList);
         this.formulaList = new ArrayList<>();
         this.formulaList.addAll(formulaList);
-        startingIndex = 1;
-        endingIndex = formulaList.size();
-        assumptionDepth = 0;
+        this.startingIndex = startingIndex;
+        endingIndex = startingIndex + formulaList.size() - 1;
+        this.assumptionDepth = assumptionDepth;
         isClosed = false;
     }
-
-    public Proof() {
+    Proof(int assumptionDepth, int startingIndex){
         formulaList = new ArrayList<>();
-        startingIndex = 0;
-        endingIndex = 0;
-        numPremises = 0;
-        assumptionDepth = 0;
+        this.startingIndex = startingIndex;
+        endingIndex = startingIndex - 1;
+        this.assumptionDepth = assumptionDepth;
         isClosed = false;
     }
-
-
     public void append(Formula formula){
         formulaList.add(formula);
         endingIndex++;
-        if (subProof != null && !subProof.isClosed()){
+        if (subProof != null && subProof.isNotClosed()){
             subProof.append(formula);
         }
     }
@@ -44,16 +40,16 @@ public class Proof {
     }
 
     public void assume(Formula assumption){
-        setSubProof(assumption);
+        setSubProof();
         append(assumption);
     }
 
-    public String getResult(int numPremises){
+    public String getResult(){
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < numPremises - 1; i++){
-            result.append(formulaList.get(i).toString()).append(", ");
+        for (int i = 0; i < premises.size() - 1; i++){
+            result.append(premises.get(i).toString()).append(", ");
         }
-        if (numPremises > 0) result.append(formulaList.get(numPremises - 1).toString()).append(" ");
+        if (!premises.isEmpty()) result.append(premises.get(premises.size() - 1).toString()).append(" ");
         result.append("=> ");
         result.append(formulaList.get(formulaList.size() - 1).toString());
         return result.toString();
@@ -61,7 +57,7 @@ public class Proof {
 
     protected int getLineAssumptionDepth(int lineNumber) {
         int depth = 0;
-        for (SubProof sp : subProofList) {
+        for (Proof sp : subProofList) {
             if (lineNumber >= sp.startingIndex && lineNumber <= sp.endingIndex) {
                 depth++;
                 depth += sp.getLineAssumptionDepth(lineNumber);
@@ -77,13 +73,13 @@ public class Proof {
         return formulaList.isEmpty();
     }
 
-    public SubProof getSubProof(){
+    public Proof getSubProof(){
         return subProof;
     }
-    public void setSubProof(Formula assumption){
-        if (subProof != null && !subProof.isClosed()) subProof.setSubProof(assumption);
+    public void setSubProof(){
+        if (subProof != null && subProof.isNotClosed()) subProof.setSubProof();
         else {
-            subProof = new SubProof(endingIndex + 1, assumption, assumptionDepth + 1);
+            subProof = new Proof(assumptionDepth + 1, endingIndex + 1);
             subProofList.add(subProof);
         }
     }
@@ -91,8 +87,8 @@ public class Proof {
         isClosed = true;
     }
 
-    public boolean isClosed(){
-        return isClosed;
+    public boolean isNotClosed(){
+        return !isClosed;
     }
     public int getStartingIndex(){
         return startingIndex;
