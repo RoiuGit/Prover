@@ -4,10 +4,16 @@ import java.util.List;
 public class Proof {
     List<Formula> formulaList;
 
+    Proof(){
+        this.formulaList = new ArrayList<>();
+    }
+
     Proof(List<Formula> formulaList){
         this.formulaList = new ArrayList<>();
         this.formulaList.addAll(formulaList);
     }
+
+
 
     public void append(Formula formula){
         formulaList.add(formula);
