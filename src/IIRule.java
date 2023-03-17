@@ -12,7 +12,7 @@ public class IIRule extends Rule{
         Formula result;
         if (proof.getSubProof() == null && proof.getAssumptionDepth() > 0 || !proof.getSubProof().isNotClosed()){
             result = new Formula("(%s->%s)".formatted(proof.getFormula(0).toString(), proof.getFormula(proof.size() - 1).toString()));
-            proof.closeSubProof();
+            proof.close();
         }
         else result = applyRule(premises, proof.getSubProof());
         return result;

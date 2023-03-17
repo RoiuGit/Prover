@@ -40,7 +40,7 @@ public class Proof {
     }
 
     public void assume(Formula assumption){
-        setSubProof();
+        addSubProof();
         append(assumption);
     }
 
@@ -69,21 +69,30 @@ public class Proof {
     public int getAssumptionDepth(){
         return assumptionDepth;
     }
-    public boolean isEmpty(){
-        return formulaList.isEmpty();
+    public boolean belongsToClosedProof(int lineNumber) {
+        for (Proof subProof : subProofList) {
+            if (lineNumber >= subProof.getStartingIndex() && lineNumber <= subProof.getEndingIndex()) {
+                if (subProof.isClosed) {
+                    return true;
+                } else {
+                    return subProof.belongsToClosedProof(lineNumber);
+                }
+            }
+        }
+        return false;
     }
 
     public Proof getSubProof(){
         return subProof;
     }
-    public void setSubProof(){
-        if (subProof != null && subProof.isNotClosed()) subProof.setSubProof();
+    public void addSubProof(){
+        if (subProof != null && subProof.isNotClosed()) subProof.addSubProof();
         else {
             subProof = new Proof(assumptionDepth + 1, endingIndex + 1);
             subProofList.add(subProof);
         }
     }
-    public void closeSubProof(){
+    public void close(){
         isClosed = true;
     }
 

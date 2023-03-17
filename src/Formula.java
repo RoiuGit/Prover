@@ -15,9 +15,13 @@ public class Formula {
         if (Objects.equals(sign, "") || Objects.equals(sign, "~")){
             isAtomicFormula = true;
         }
-        if (isAtomicFormula){
+        if (Objects.equals(sign, "")){
             signIndex = 0;
             antecedent = this;
+        }
+        if (Objects.equals(sign, "~")){
+            signIndex = 0;
+            antecedent = new Formula(expression.substring(1));
         }
     }
 
@@ -29,7 +33,7 @@ public class Formula {
                 case '(' -> openParens++;
                 case ')' -> openParens--;
                 case '>' -> {
-                    if (openParens == 0) {
+                    if (openParens == 0 && !Objects.equals(sign, "~")) {
                         sign = "->";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex - 1));
@@ -37,11 +41,24 @@ public class Formula {
                     }
                 }
                 case '&' -> {
-                    if (openParens == 0) {
+                    if (openParens == 0 && !Objects.equals(sign, "~")) {
                         sign = "&";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex));
                         consequent = new Formula(expression.substring(signIndex + 1, expression.length() - 1));
+                    }
+                }
+                case 'v' -> {
+                    if (openParens == 0 && !Objects.equals(sign, "~")){
+                        sign = "v";
+                        signIndex = i;
+                        antecedent = new Formula(expression.substring(1, signIndex));
+                        consequent = new Formula(expression.substring(signIndex + 1, expression.length() - 1));
+                    }
+                }
+                case '~' -> {
+                    if (openParens < 1 && !Objects.equals(sign, "~")){
+                        sign = "~";
                     }
                 }
             }
@@ -58,12 +75,6 @@ public class Formula {
     //To-do: implement
     return expression;
     }
-
-
-    private static boolean isOperator(char o) {
-        return o == '&' || o == '>';
-    }
-
     public String getSign() {
         return sign;
     }
@@ -74,6 +85,24 @@ public class Formula {
 
     public Formula getConsequent() {
         return consequent;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Formula formula = (Formula) o;
+
+        return Objects.equals(expression, formula.expression);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sign, antecedent, consequent);
     }
 
     @Override

@@ -9,22 +9,32 @@ public class NaturalDeductionApp {
         Scanner scn = new Scanner(System.in);
         NaturalDeduction nd = new NaturalDeduction();
         List<Formula> premises = new ArrayList<>();
-        System.out.print("Enter number of premises: ");
-        int numPremises = Integer.parseInt(scn.nextLine());
-
+        int numPremises;
+        while (true) {
+            try {
+                System.out.print("Enter number of premises: ");
+                numPremises = Integer.parseInt(scn.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Please try again.");
+            }
+        }
         for (int i = 0; i < numPremises; i++){
-            System.out.print("Enter premise " + (i + 1) + ": ");
-            premises.add(new Formula(scn.nextLine()));
+            try {
+                System.out.print("Enter premise " + (i + 1) + ": ");
+                premises.add(new Formula(scn.nextLine()));
+            }
+            catch (IllegalArgumentException e){
+                System.out.println("Invalid formula. Please try again.");
+            }
         }
         Proof proof = new Proof(premises, 0, 1);
-        Formula result;
         String rule;
         while(true) {
             premises.clear();
             System.out.println(proof);
             System.out.print("Enter the rule you want to apply, enter \"ASSUME\" to add an assumption, or enter \"END\" to end proof: ");
             rule = scn.nextLine();
-
             if (rule.equalsIgnoreCase("END")){
                 System.out.println(proof);
                 System.out.println(proof.getResult());
@@ -36,13 +46,36 @@ public class NaturalDeductionApp {
                 proof.assume(new Formula(scn.nextLine()));
                 continue;
             }
-            for (int i = 0; i < nd.getNumPremises(rule); i++) {
-                System.out.print("Enter the index of premise " + (i + 1) + ": ");
-                premises.add(proof.getFormula(Integer.parseInt(scn.nextLine()) - proof.getStartingIndex()));
+            int numPremisesForRule;
+            try {
+                numPremisesForRule = nd.getNumPremises(rule);
             }
-
-            result = nd.applyRule(rule, premises, proof);
-            proof.append(result);
+            catch (Exception e){
+                System.out.println("Invalid rule or input. Please try again.");
+                continue;
+            }
+            for (int i = 0; i < numPremisesForRule; i++) {
+                System.out.print("Enter the index of premise " + (i + 1) + ": ");
+                int lineIndex;
+                try{
+                    lineIndex = Integer.parseInt(scn.nextLine());
+                    if (!proof.belongsToClosedProof(lineIndex))
+                        premises.add(proof.getFormula(lineIndex - proof.getStartingIndex()));
+                    else {
+                        System.out.println("Can't use formula in a closed proof.");
+                        i--;
+                    }
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println("Must enter a valid number.");
+                    i--;
+                }
+            }
+            try {
+                nd.applyRule(rule, premises, proof);
+            }
+            catch (IllegalArgumentException e){
+                System.out.println("Failed to apply rule " + rule + ". Please try again.");
+            }
         }
     }
 }
