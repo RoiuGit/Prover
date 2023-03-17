@@ -22,4 +22,8 @@ public class NaturalDeduction {
             return null;
         }
     }
+    public int getNumPremises(String rule){
+        Rule ruleInstance = ruleMap.get(rule.toUpperCase());
+        return ruleInstance.numPremises;
+    }
 }

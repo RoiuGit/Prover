@@ -14,12 +14,27 @@ public class NaturalDeductionApp {
         for (int i = 0; i < numPremises; i++){
             System.out.print("Enter premise " + (i + 1) + ": ");
             premises.add(new Formula(scn.nextLine()));
-            System.out.println();
         }
-        System.out.print("Enter the rule you want to apply: ");
-        String rule = scn.nextLine();
-        Formula result = nd.applyRule(rule, premises);
-        if (result != null)
-            System.out.println(result);
+        Proof proof = new Proof(premises);
+        Formula result;
+        String rule;
+        while(true) {
+            premises.clear();
+            System.out.println(proof);
+            System.out.print("Enter the rule you want to apply, or enter \"END\" to end proof: ");
+            rule = scn.nextLine();
+            if (rule.equalsIgnoreCase("END")){
+                System.out.println(proof);
+                System.out.println(proof.getResult(numPremises));
+                break;
+            }
+            for (int i = 0; i < nd.getNumPremises(rule); i++) {
+                System.out.print("Enter the index of premise " + (i + 1) + ": ");
+                premises.add(proof.getFormula(Integer.parseInt(scn.nextLine())));
+            }
+            nd.applyRule(rule, premises);
+            result = nd.applyRule(rule, premises);
+            proof.append(result);
+        }
     }
 }

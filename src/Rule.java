@@ -2,6 +2,7 @@ import java.util.List;
 
 public abstract class Rule {
 
-    int numPremises;
+    protected int numPremises;
     public abstract Formula applyRule(List<Formula> premises);
+    public abstract int getNumPremises();
 }

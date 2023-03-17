@@ -14,4 +14,9 @@ public class CE1Rule extends Rule{
             return conjunction.getAntecedent();
         return null;
     }
+
+    @Override
+    public int getNumPremises() {
+        return numPremises;
+    }
 }

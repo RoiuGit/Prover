@@ -18,4 +18,9 @@ public class IERule extends Rule {
 
         return null;
     }
+
+    @Override
+    public int getNumPremises() {
+        return numPremises;
+    }
 }

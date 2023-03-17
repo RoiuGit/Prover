@@ -14,4 +14,9 @@ public class CE2Rule extends Rule{
             return conjunction.getConsequent();
         return null;
     }
+
+    @Override
+    public int getNumPremises() {
+        return numPremises;
+    }
 }
