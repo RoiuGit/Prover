@@ -27,10 +27,11 @@ public class NaturalDeductionApp {
                 System.out.println("Invalid formula. Please try again.");
             }
         }
-        Proof proof = new Proof(premises, 0, 1);
+        Proof proof = new Proof(premises);
         String rule;
+        List<Integer> premisesIndexes = new ArrayList<>();
         while (true) {
-            premises.clear();
+            premisesIndexes.clear();
             System.out.println(proof);
             System.out.print("Enter the rule you want to apply, enter \"ASSUME\" to add an assumption, or enter \"END\" to end proof: ");
             rule = scn.nextLine();
@@ -58,7 +59,7 @@ public class NaturalDeductionApp {
                 try {
                     lineIndex = Integer.parseInt(scn.nextLine());
                     if (!proof.belongsToClosedProof(lineIndex))
-                        premises.add(proof.getFormula(lineIndex - proof.getStartingIndex()));
+                        premisesIndexes.add(lineIndex);
                     else {
                         System.out.println("Can't use formula in a closed proof.");
                         i--;
@@ -69,7 +70,7 @@ public class NaturalDeductionApp {
                 }
             }
             try {
-                nd.applyRule(rule, premises, proof);
+                nd.applyRule(rule, premisesIndexes, proof);
             } catch (IllegalArgumentException e) {
                 System.out.println("Failed to apply rule " + rule + ". Please try again.");
             }
