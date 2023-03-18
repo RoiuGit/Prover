@@ -9,9 +9,10 @@ public class NaturalDeduction {
     NaturalDeduction() {
         ruleMap = new HashMap<>();
         putRule(new IERule());
+        putRule(new IIRule());
         putRule(new CE1Rule());
         putRule(new CE2Rule());
-        putRule(new IIRule());
+        putRule(new CIRule());
         putRule(new NERule());
         putRule(new NIRule());
     }
