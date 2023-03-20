@@ -48,6 +48,7 @@ public class Proof {
     }
 
     public String getResult() {
+        if (subProof != null && subProof.isNotClosed()) return null;
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < premises.size() - 1; i++) {
             result.append(premises.get(i).toString()).append(", ");

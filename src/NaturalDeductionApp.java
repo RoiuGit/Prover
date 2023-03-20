@@ -12,6 +12,7 @@ public class NaturalDeductionApp {
         int numPremises;
         while (true) {
             try {
+                // Prompt user to enter number of initial premises.
                 System.out.print("Enter number of premises: ");
                 numPremises = Integer.parseInt(scn.nextLine());
                 break;
@@ -19,8 +20,10 @@ public class NaturalDeductionApp {
                 System.out.println("Invalid number. Please try again.");
             }
         }
+        //
         for (int i = 0; i < numPremises; i++) {
             try {
+                // Prompt user to enter a premise numPremises-number of times.
                 System.out.print("Enter premise " + (i + 1) + ": ");
                 premises.add(new Formula(scn.nextLine()));
             } catch (IllegalArgumentException e) {
@@ -30,15 +33,23 @@ public class NaturalDeductionApp {
         Proof proof = new Proof(premises);
         String rule;
         List<Integer> premisesIndexes = new ArrayList<>();
-        while (true) {
+        while (true) { // Main loop.
             premisesIndexes.clear();
             System.out.println(proof);
             System.out.print("Enter the rule you want to apply, enter \"ASSUME\" to add an assumption, or enter \"END\" to end proof: ");
             rule = scn.nextLine();
+            // If user finishes proof, print the proof again and print the result ([premises list] => last formula)
             if (rule.equalsIgnoreCase("END")) {
                 System.out.println(proof);
-                System.out.println(proof.getResult());
-                break;
+                String result = proof.getResult();
+                if (result != null) {
+                    System.out.println(result);
+                    break;
+                }
+                else {
+                    System.out.println("Could not end the result. All of the subproofs must be closed.");
+                    continue;
+                }
             }
 
             if (rule.equalsIgnoreCase("ASSUME")) {
@@ -58,8 +69,7 @@ public class NaturalDeductionApp {
                 int lineIndex;
                 try {
                     lineIndex = Integer.parseInt(scn.nextLine());
-                    if (!proof.belongsToClosedProof(lineIndex))
-                        premisesIndexes.add(lineIndex);
+                    if (!proof.belongsToClosedProof(lineIndex)) premisesIndexes.add(lineIndex);
                     else {
                         System.out.println("Can't use formula in a closed proof.");
                         i--;
