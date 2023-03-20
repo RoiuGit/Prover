@@ -8,6 +8,9 @@ public class NaturalDeductionApp {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         NaturalDeduction nd = new NaturalDeduction();
+        nd.getRuleList().stream()
+                .map(ruleInstance -> ruleInstance.getRuleName() + ":\n" + ruleInstance.getSchema() + "\n")
+                .forEach(System.out::println);
         List<Formula> premises = new ArrayList<>();
         int numPremises;
         while (true) {

@@ -6,6 +6,10 @@ public class NIRule extends Rule {
     NIRule() {
         numPremises = 2;
         ruleName = "NI";
+        schema = """
+                A, ~A
+                -----
+                  C  , where C is the last unclosed assumption.""";
     }
 
     @Override

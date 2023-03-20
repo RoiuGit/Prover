@@ -5,6 +5,10 @@ public class DERule extends Rule{
     DERule() {
         numPremises = 2;
         ruleName = "DE";
+        schema = """
+                (AvB), ~A
+                ---------
+                    B   \s""";
     }
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {

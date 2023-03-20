@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class NaturalDeduction {
     private final Map<String, Rule> ruleMap;
@@ -41,5 +42,11 @@ public class NaturalDeduction {
     public int getNumPremises(String rule) {
         Rule ruleInstance = ruleMap.get(rule.toUpperCase());
         return ruleInstance.getNumPremises();
+    }
+
+    public List<Rule> getRuleList(){ //returns list of rules, sorted by name
+        return ruleMap.keySet()
+                .stream().sorted()
+                .map(ruleMap::get).collect(Collectors.toList());
     }
 }

@@ -5,6 +5,10 @@ public class IERule extends Rule {
     IERule() {
         numPremises = 2;
         ruleName = "IE";
+        schema = """
+                (A->B), A
+                ---------
+                    B   \s""";
     }
 
     @Override

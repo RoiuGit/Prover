@@ -5,6 +5,10 @@ public class DI2Rule extends Rule{
     DI2Rule(){
         numPremises = 1;
         ruleName = "DI2";
+        schema = """
+                  A \s
+                -----
+                (BvA)""";
     }
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {

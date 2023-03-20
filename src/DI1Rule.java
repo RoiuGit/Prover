@@ -5,6 +5,10 @@ public class DI1Rule extends Rule {
     DI1Rule() {
         numPremises = 1;
         ruleName = "DI1";
+        schema = """
+                  A \s
+                -----
+                (AvB)""";
     }
 
     @Override

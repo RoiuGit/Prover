@@ -5,6 +5,10 @@ public class IIRule extends Rule {
     IIRule() {
         numPremises = 1;
         ruleName = "II";
+        schema = """
+                   B  \s
+                -------
+                 (C->B), where C is the last unclosed assumption.""";
     }
 
     @Override

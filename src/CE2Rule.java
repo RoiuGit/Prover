@@ -6,6 +6,10 @@ public class CE2Rule extends Rule {
     CE2Rule() {
         numPremises = 1;
         ruleName = "CE2";
+        schema = """
+                (A&B)
+                -----
+                  B \s""";
     }
 
     @Override

@@ -5,6 +5,10 @@ public class CIRule extends Rule {
     CIRule() {
         numPremises = 2;
         ruleName = "CI";
+        schema = """
+                (A&B)
+                -----
+                 A,B\s""";
     }
 
     @Override

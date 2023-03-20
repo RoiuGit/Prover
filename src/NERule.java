@@ -5,6 +5,10 @@ public class NERule extends Rule {
     NERule() {
         numPremises = 1;
         ruleName = "NE";
+        schema = """
+                ~~B
+                ---
+                 B\s""";
     }
 
     @Override
