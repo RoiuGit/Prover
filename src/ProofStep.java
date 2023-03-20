@@ -41,10 +41,10 @@ public class ProofStep {
         StringBuilder annotation = new StringBuilder();
         if (!isPremise && !isAssumption) {
             annotation.append(" (").append(ruleApplied.getRuleName()).append(":");
-            for (int i = 0; i < premisesIndexes.size() - 1; i++) {
-                annotation.append(premisesIndexes.get(i)).append(", ");
-            }
-            annotation.append(premisesIndexes.get(premisesIndexes.size() - 1));
+            String premisesIndexes = premises.keySet().stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(", "));
+            annotation.append(premisesIndexes);
             annotation.append(")");
         } else if (isPremise) annotation.append(" (premise)");
         else annotation.append(" (assumption)");
