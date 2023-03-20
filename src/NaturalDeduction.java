@@ -15,6 +15,9 @@ public class NaturalDeduction {
         putRule(new CIRule());
         putRule(new NERule());
         putRule(new NIRule());
+        putRule(new DERule());
+        putRule(new DI1Rule());
+        putRule(new DI2Rule());
     }
 
     private void putRule(Rule rule) {
@@ -29,7 +32,7 @@ public class NaturalDeduction {
         }
         Formula result = ruleInstance.applyRule(premises, proof);
         if (result != null) {
-            proof.append(new ProofStep(proof.getEndingIndex() + 1, premisesIndexes, result, ruleInstance));
+            proof.append(new ProofStep(proof.getEndingIndex() + 1, premisesIndexes, premises, result, ruleInstance));
         } else {
             throw new IllegalArgumentException();
         }
