@@ -9,9 +9,9 @@ public class Formula {
     private boolean isAtomicFormula;
 
     Formula(String expression) {
-        this.expression = expression;
+        this.expression = normalize(expression);
         sign = "";
-        evaluate(normalize(expression));
+        evaluate(this.expression);
         if (Objects.equals(sign, "") || Objects.equals(sign, "~")) {
             isAtomicFormula = true;
         }
