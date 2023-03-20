@@ -15,7 +15,7 @@ public class Proof {
         premises = new ArrayList<>();
         premises.addAll(proofSteps);
         this.proofSteps = new ArrayList<>();
-        this.proofSteps = toSteps(proofSteps);
+        this.proofSteps = ProofStep.toSteps(proofSteps);
         this.startingIndex = 1;
         endingIndex = 1 + proofSteps.size() - 1;
         this.assumptionDepth = 0;
@@ -118,13 +118,6 @@ public class Proof {
         return proofSteps.size();
     }
 
-    private List<ProofStep> toSteps(List<Formula> formulas){
-        List<ProofStep> proofStepList = new ArrayList<>();
-        for (int i = 0; i < formulas.size(); i++){
-            proofStepList.add(new ProofStep(i + 1, formulas.get(i), 'p'));
-        }
-        return proofStepList;
-    }
     public String toString() {
         StringBuilder proof = new StringBuilder();
         int lineNumber = 1;

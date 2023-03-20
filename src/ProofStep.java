@@ -34,6 +34,13 @@ public class ProofStep {
         else annotation.append(" (assumption)");
         return annotation.toString();
     }
+    public static List<ProofStep> toSteps(List<Formula> formulas){
+        List<ProofStep> proofStepList = new ArrayList<>();
+        for (int i = 0; i < formulas.size(); i++){
+            proofStepList.add(new ProofStep(i + 1, formulas.get(i), 'p'));
+        }
+        return proofStepList;
+    }
 
     public Formula getFormula(){
         return formula;
