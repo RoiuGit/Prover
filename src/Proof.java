@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Proof {
+    final List<Proof> subProofList = new ArrayList<>();
     private final int assumptionDepth;
     private final int startingIndex;
     List<ProofStep> proofSteps;
     List<Formula> premises;
-    final List<Proof> subProofList = new ArrayList<>();
     Proof subProof;
     private int endingIndex;
     private boolean isClosed;

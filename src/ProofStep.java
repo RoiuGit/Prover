@@ -1,26 +1,38 @@
 import java.util.ArrayList;
 import java.util.List;
+
 public class ProofStep {
     private final int index;
-    private List<Integer> premisesIndexes;
     private final Formula formula;
+    private List<Integer> premisesIndexes;
     private Rule ruleApplied;
     private boolean isPremise;
     private boolean isAssumption;
-    ProofStep(int index, List<Integer> premisesIndexes, Formula formula, Rule ruleApplied){
+
+    ProofStep(int index, List<Integer> premisesIndexes, Formula formula, Rule ruleApplied) {
         this.index = index;
         this.premisesIndexes = new ArrayList<>();
         this.premisesIndexes.addAll(premisesIndexes);
         this.formula = formula;
         this.ruleApplied = ruleApplied;
     }
-    ProofStep(int index, Formula formula, char mode){
+
+    ProofStep(int index, Formula formula, char mode) {
         this.index = index;
         this.formula = formula;
         if (mode == 'p') isPremise = true;
         if (mode == 'a') isAssumption = true;
     }
-    public String getAnnotation(){
+
+    public static List<ProofStep> toSteps(List<Formula> formulas) {
+        List<ProofStep> proofStepList = new ArrayList<>();
+        for (int i = 0; i < formulas.size(); i++) {
+            proofStepList.add(new ProofStep(i + 1, formulas.get(i), 'p'));
+        }
+        return proofStepList;
+    }
+
+    public String getAnnotation() {
         StringBuilder annotation = new StringBuilder();
         if (!isPremise && !isAssumption) {
             annotation.append(" (").append(ruleApplied.getRuleName()).append(":");
@@ -29,20 +41,12 @@ public class ProofStep {
             }
             annotation.append(premisesIndexes.get(premisesIndexes.size() - 1));
             annotation.append(")");
-        }
-        else if (isPremise) annotation.append(" (premise)");
+        } else if (isPremise) annotation.append(" (premise)");
         else annotation.append(" (assumption)");
         return annotation.toString();
     }
-    public static List<ProofStep> toSteps(List<Formula> formulas){
-        List<ProofStep> proofStepList = new ArrayList<>();
-        for (int i = 0; i < formulas.size(); i++){
-            proofStepList.add(new ProofStep(i + 1, formulas.get(i), 'p'));
-        }
-        return proofStepList;
-    }
 
-    public Formula getFormula(){
+    public Formula getFormula() {
         return formula;
     }
 
