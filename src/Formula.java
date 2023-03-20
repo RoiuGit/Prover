@@ -26,7 +26,7 @@ public class Formula {
     }
 
     private static String normalize(String expression) {
-        expression = expression.toUpperCase();
+        expression = expression.toUpperCase().replaceAll("\\s+","");
         expression = removeExcessParentheses(expression);
         return expression;
     }
