@@ -59,7 +59,7 @@ public class Formula {
                         consequent = new Formula(expression.substring(signIndex + 1, expression.length() - 1));
                     }
                 }
-                case 'v' -> {
+                case 'V' -> {
                     if (openParens == 0 && Objects.equals(sign, "")) {
                         sign = "v";
                         signIndex = i;
