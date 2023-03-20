@@ -9,22 +9,14 @@ public class IIRule extends Rule {
 
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
-        if (premises.size() != numPremises) return null;
-        Formula result;
-        if (proof.getSubProof() == null && proof.getAssumptionDepth() > 0 || !proof.getSubProof().isNotClosed()) {
-            result = new Formula("(%s->%s)".formatted(proof.getFormula(0), premises.get(0)));
-            proof.close();
-        } else result = applyRule(premises, proof.getSubProof());
+        Formula result = null;
+        if (premises.size() == numPremises) {
+            if (proof.getSubProof() == null && proof.getAssumptionDepth() > 0 || !proof.getSubProof().isNotClosed()) {
+                Formula antecedent = premises.get(0);
+                result = new Formula("(%s->%s)".formatted(proof.getFormula(0), antecedent));
+                proof.close();
+            } else result = applyRule(premises, proof.getSubProof());
+        }
         return result;
-    }
-
-    @Override
-    public int getNumPremises() {
-        return numPremises;
-    }
-
-    @Override
-    public String getRuleName() {
-        return ruleName;
     }
 }

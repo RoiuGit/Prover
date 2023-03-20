@@ -9,21 +9,12 @@ public class CIRule extends Rule {
 
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
-        if (premises.size() != numPremises) return null;
-        else {
+        Formula result = null;
+        if (premises.size() == numPremises) {
             Formula conjunct1 = premises.get(0);
             Formula conjunct2 = premises.get(1);
-            return new Formula("(%s&%s)".formatted(conjunct1, conjunct2));
+            result = new Formula("(%s&%s)".formatted(conjunct1, conjunct2));
         }
-    }
-
-    @Override
-    public int getNumPremises() {
-        return numPremises;
-    }
-
-    @Override
-    public String getRuleName() {
-        return ruleName;
+        return result;
     }
 }

@@ -10,19 +10,11 @@ public class CE1Rule extends Rule {
 
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
-        if (premises.size() != numPremises) return null;
-        Formula conjunction = premises.get(0);
-        if (Objects.equals(conjunction.getSign(), "&")) return conjunction.getAntecedent();
-        return null;
-    }
-
-    @Override
-    public int getNumPremises() {
-        return numPremises;
-    }
-
-    @Override
-    public String getRuleName() {
-        return ruleName;
+        Formula result = null;
+        if (premises.size() == numPremises) {
+            Formula conjunction = premises.get(0);
+            if (Objects.equals(conjunction.getSign(), "&")) result = conjunction.getAntecedent();
+        }
+        return result;
     }
 }

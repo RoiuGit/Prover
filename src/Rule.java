@@ -6,7 +6,11 @@ public abstract class Rule {
 
     public abstract Formula applyRule(List<Formula> premises, Proof proof);
 
-    public abstract int getNumPremises();
+    public int getNumPremises(){
+        return numPremises;
+    }
 
-    public abstract String getRuleName();
+    public String getRuleName(){
+        return ruleName;
+    }
 }

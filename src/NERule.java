@@ -9,22 +9,13 @@ public class NERule extends Rule {
 
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
-        if (premises.size() != numPremises) return null;
-        Formula doubleNegation = premises.get(0);
-        Formula negation = premises.get(0).getAntecedent();
-        if (Objects.equals(doubleNegation.getSign(), "~") && Objects.equals(negation.getSign(), "~"))
-            return negation.getAntecedent();
-        else return null;
-
-    }
-
-    @Override
-    public int getNumPremises() {
-        return numPremises;
-    }
-
-    @Override
-    public String getRuleName() {
-        return ruleName;
+        Formula result = null;
+        if (premises.size() == numPremises) {
+            Formula doubleNegation = premises.get(0);
+            Formula negation = premises.get(0).getAntecedent();
+            if (Objects.equals(doubleNegation.getSign(), "~") && Objects.equals(negation.getSign(), "~"))
+                result = negation.getAntecedent();
+        }
+        return result;
     }
 }
