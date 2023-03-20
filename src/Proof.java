@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Proof {
     final List<Proof> subProofList = new ArrayList<>();
@@ -50,11 +51,11 @@ public class Proof {
     public String getResult() {
         if (subProof != null && subProof.isNotClosed()) return null;
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < premises.size() - 1; i++) {
-            result.append(premises.get(i).toString()).append(", ");
-        }
-        if (!premises.isEmpty()) result.append(premises.get(premises.size() - 1).toString()).append(" ");
-        result.append("=> ");
+        String premisesStr = premises.stream()
+                .map(Formula::toString)
+                .collect(Collectors.joining(", "));
+        result.append(premisesStr);
+        result.append(" => ");
         result.append(proofSteps.get(proofSteps.size() - 1).getFormula());
         return result.toString();
     }
