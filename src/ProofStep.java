@@ -45,4 +45,8 @@ public class ProofStep {
     public Formula getFormula(){
         return formula;
     }
+
+    public int getIndex() {
+        return index;
+    }
 }

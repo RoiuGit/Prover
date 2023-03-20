@@ -44,7 +44,7 @@ public class Formula {
                 case '(' -> openParens++;
                 case ')' -> openParens--;
                 case '>' -> {
-                    if (openParens == 0 && !Objects.equals(sign, "~")) {
+                    if (openParens == 0 && Objects.equals(sign, "")) {
                         sign = "->";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex - 1));
@@ -52,7 +52,7 @@ public class Formula {
                     }
                 }
                 case '&' -> {
-                    if (openParens == 0 && !Objects.equals(sign, "~")) {
+                    if (openParens == 0 && Objects.equals(sign, "")) {
                         sign = "&";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex));
@@ -60,7 +60,7 @@ public class Formula {
                     }
                 }
                 case 'v' -> {
-                    if (openParens == 0 && !Objects.equals(sign, "~")) {
+                    if (openParens == 0 && Objects.equals(sign, "")) {
                         sign = "v";
                         signIndex = i;
                         antecedent = new Formula(expression.substring(1, signIndex));
@@ -68,7 +68,7 @@ public class Formula {
                     }
                 }
                 case '~' -> {
-                    if (openParens < 1 && !Objects.equals(sign, "~")) {
+                    if (openParens < 1 && Objects.equals(sign, "")) {
                         sign = "~";
                     }
                 }

@@ -120,14 +120,12 @@ public class Proof {
 
     public String toString() {
         StringBuilder proof = new StringBuilder();
-        int lineNumber = 1;
         for (ProofStep proofStep : proofSteps) {
-            proof.append(lineNumber).append(".");
-            int depth = getLineAssumptionDepth(lineNumber);
+            proof.append(proofStep.getIndex()).append(".");
+            int depth = getLineAssumptionDepth(proofStep.getIndex());
             proof.append("|".repeat(Math.max(0, depth)));
             proof.append(" ");
             proof.append(proofStep.getFormula()).append(proofStep.getAnnotation()).append("\n");
-            lineNumber++;
         }
 
         return proof.toString();
