@@ -18,4 +18,9 @@ public abstract class Rule {
     public String getSchema() {
         return schema;
     }
+
+    @Override
+    public String toString() {
+        return ruleName;
+    }
 }
