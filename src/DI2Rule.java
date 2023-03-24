@@ -1,8 +1,8 @@
 import java.util.List;
 import java.util.Scanner;
 
-public class DI2Rule extends Rule{
-    DI2Rule(){
+public class DI2Rule extends Rule {
+    DI2Rule() {
         numPremises = 1;
         ruleName = "DI2";
         schema = """
@@ -10,10 +10,11 @@ public class DI2Rule extends Rule{
                 -----
                 (BvA)""";
     }
+
     @Override
     public Formula applyRule(List<Formula> premises, Proof proof) {
         Formula result = null;
-        if (numPremises == premises.size()){
+        if (numPremises == premises.size()) {
             Formula disjunct2 = premises.get(0);
             System.out.print("Enter the first disjunct: ");
             String disjunct1 = new Scanner(System.in).nextLine();
