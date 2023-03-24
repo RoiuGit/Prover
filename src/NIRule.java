@@ -20,7 +20,7 @@ public class NIRule extends Rule {
             Formula negation = premises.get(1);
             if (!Objects.equals(affirmation.getSign(), "~") && Objects.equals(negation.getSign(), "~") && affirmation.equals(negation.getAntecedent())) {
                 if (proof.getSubProof() == null && proof.getAssumptionDepth() > 0 || !proof.getSubProof().isNotClosed()) {
-                    result = new Formula("~" + proof.getFormula(proof.size() - 1));
+                    result = new Formula("~" + proof.getFormula(0));
                     proof.close();
                 } else result = applyRule(premises, proof.getSubProof());
             }
