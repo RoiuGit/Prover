@@ -7,14 +7,15 @@ public abstract class Rule {
 
     public abstract Formula applyRule(List<Formula> premises, Proof proof);
 
-    public int getNumPremises(){
+    public int getNumPremises() {
         return numPremises;
     }
 
-    public String getRuleName(){
+    public String getRuleName() {
         return ruleName;
     }
-    public String getSchema(){
+
+    public String getSchema() {
         return schema;
     }
 }
