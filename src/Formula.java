@@ -21,7 +21,7 @@ public class Formula {
     }
 
     private static String removeExcessParentheses(String expression) {
-        //To-do: implement
+        /* TODO: implement */
         return expression;
     }
 
