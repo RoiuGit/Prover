@@ -1,3 +1,8 @@
+package prover.rules;
+
+import prover.formula.Formula;
+import prover.proof.Proof;
+
 import java.util.List;
 
 public abstract class Rule {
@@ -20,5 +25,7 @@ public abstract class Rule {
     }
 
     @Override
-    public String toString() { return ruleName; }
+    public String toString() {
+        return ruleName;
+    }
 }

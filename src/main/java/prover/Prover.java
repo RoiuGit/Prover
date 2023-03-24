@@ -1,3 +1,8 @@
+package prover;
+
+import prover.formula.Formula;
+import prover.naturaldeduction.NaturalDeduction;
+
 import java.io.File;
 import java.util.*;
 
@@ -65,14 +70,22 @@ public class Prover implements Runnable {
             if (input.equalsIgnoreCase("Y")) {
                 File dir = new File(path);
                 System.out.println("Choose a file to load:");
-                Arrays.stream(Objects.requireNonNull(dir.listFiles()))
-                        .map(File::getName)
-                        .forEach(filename -> System.out.println(filename.replaceAll(".proof", "")));
-                try {
-                    nd.fromFile(path, scn.nextLine());
-                    return true;
-                } catch (Exception e) {
-                    System.out.println("Error loading file. Try again.");
+                List<File> fileList = Arrays.stream(Objects.requireNonNull(dir.listFiles())).toList();
+                if (!fileList.isEmpty()) {
+                    for (int i = 0; i < fileList.size(); i++) {
+                        File file = fileList.get(i);
+                        System.out.printf("%d. %s%n", i + 1, file.getName().split("\\.")[0]);
+                    }
+                    try {
+                        nd.fromFile(path, fileList.get(Integer.parseInt(scn.nextLine()) - 1).getName().split("\\.")[0]);
+                        return true;
+                    } catch (Exception e) {
+                        System.out.println("Error loading file. Try again.");
+                    }
+                }
+                else {
+                    System.out.println("There are no files to read.");
+                    return false;
                 }
             } else if (input.equalsIgnoreCase("N")) {
                 return false;

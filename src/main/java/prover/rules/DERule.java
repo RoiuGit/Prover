@@ -1,3 +1,8 @@
+package prover.rules;
+
+import prover.formula.Formula;
+import prover.proof.Proof;
+
 import java.util.List;
 
 public class DERule extends Rule {

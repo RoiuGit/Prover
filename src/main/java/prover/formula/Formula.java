@@ -1,3 +1,5 @@
+package prover.formula;
+
 import java.util.Objects;
 
 public class Formula {
@@ -7,7 +9,7 @@ public class Formula {
     private Formula consequent;
     private boolean isAtomicFormula;
 
-    Formula(String expression) {
+    public Formula(String expression) {
         this.expression = normalize(expression);
         evaluate();
     }

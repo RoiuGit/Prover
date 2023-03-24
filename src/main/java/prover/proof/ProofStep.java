@@ -1,3 +1,8 @@
+package prover.proof;
+
+import prover.formula.Formula;
+import prover.rules.Rule;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,7 +17,7 @@ public class ProofStep {
     private boolean isPremise;
     private boolean isAssumption;
 
-    ProofStep(int index, List<Integer> premisesIndexes, List<Formula> premises, Formula formula, Rule ruleApplied) {
+    public ProofStep(int index, List<Integer> premisesIndexes, List<Formula> premises, Formula formula, Rule ruleApplied) {
         this.index = index;
         for (int i = 0; i < premises.size(); i++) {
             this.premises.put(premisesIndexes.get(i), premises.get(i));

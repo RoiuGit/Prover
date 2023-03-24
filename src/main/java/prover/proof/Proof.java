@@ -1,3 +1,7 @@
+package prover.proof;
+
+import prover.formula.Formula;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +18,7 @@ public class Proof {
     private int endingIndex;
     private boolean isClosed;
 
-    Proof(List<Formula> premises) {
+    public Proof(List<Formula> premises) {
         this.premises.addAll(premises);
         this.proofSteps.addAll(ProofStep.toSteps(premises));
         this.startingIndex = 1;

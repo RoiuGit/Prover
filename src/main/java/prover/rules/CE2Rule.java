@@ -1,15 +1,20 @@
+package prover.rules;
+
+import prover.formula.Formula;
+import prover.proof.Proof;
+
 import java.util.List;
 import java.util.Objects;
 
-public class CE1Rule extends Rule {
+public class CE2Rule extends Rule {
 
-     public CE1Rule() {
+    public CE2Rule() {
         numPremises = 1;
-        ruleName = "CE1";
+        ruleName = "CE2";
         schema = """
                 (A&B)
                 -----
-                  A \s""";
+                  B \s""";
     }
 
     @Override
@@ -17,7 +22,7 @@ public class CE1Rule extends Rule {
         Formula result = null;
         if (premises.size() == numPremises) {
             Formula conjunction = premises.get(0);
-            if (Objects.equals(conjunction.getSign(), "&")) result = conjunction.getAntecedent();
+            if (Objects.equals(conjunction.getSign(), "&")) result = conjunction.getConsequent();
         }
         return result;
     }

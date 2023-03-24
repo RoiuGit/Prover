@@ -1,5 +1,12 @@
+package prover.naturaldeduction;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import prover.formula.Formula;
+import prover.proof.Proof;
+import prover.proof.ProofStep;
+import prover.rules.*;
+import prover.rules.gsonadapter.RuleTypeAdapter;
 
 import java.io.*;
 import java.util.HashMap;
@@ -11,7 +18,7 @@ public class NaturalDeduction {
     private final Map<String, Rule> ruleMap = new HashMap<>();
     private Proof mainProof;
 
-    NaturalDeduction() {
+    public NaturalDeduction() {
         putRule(new IERule());
         putRule(new IIRule());
         putRule(new CE1Rule());

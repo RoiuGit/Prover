@@ -1,8 +1,12 @@
+package prover.rules.gsonadapter;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import prover.rules.Rule;
 
 import java.io.IOException;
+
 public class RuleTypeAdapter extends TypeAdapter<Rule> {
 
     @Override
