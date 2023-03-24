@@ -2,7 +2,7 @@ import java.util.List;
 
 public class IERule extends Rule {
 
-    IERule() {
+    public IERule() {
         numPremises = 2;
         ruleName = "IE";
         schema = """

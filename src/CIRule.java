@@ -2,7 +2,7 @@ import java.util.List;
 
 public class CIRule extends Rule {
 
-    CIRule() {
+    public CIRule() {
         numPremises = 2;
         ruleName = "CI";
         schema = """

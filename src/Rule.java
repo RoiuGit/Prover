@@ -20,7 +20,5 @@ public abstract class Rule {
     }
 
     @Override
-    public String toString() {
-        return ruleName;
-    }
+    public String toString() { return ruleName; }
 }

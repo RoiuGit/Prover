@@ -3,7 +3,7 @@ import java.util.Objects;
 
 public class NIRule extends Rule {
 
-    NIRule() {
+    public NIRule() {
         numPremises = 2;
         ruleName = "NI";
         schema = """

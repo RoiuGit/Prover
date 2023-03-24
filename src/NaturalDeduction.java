@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +43,15 @@ public class NaturalDeduction {
         }
     }
 
-    public void toFile(String filename) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public void toFile(String path, String filename) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Rule.class, new RuleTypeAdapter().nullSafe())
+                .setPrettyPrinting()
+                .create();
         String json = gson.toJson(mainProof);
         try {
-            FileWriter output = new FileWriter(filename + ".proof");
+            File file = new File(path + filename + ".proof");
+            FileWriter output = new FileWriter(file);
             output.write(json);
             output.close();
         } catch (IOException e) {
@@ -57,14 +59,22 @@ public class NaturalDeduction {
         }
     }
 
-    public void fromFile(String filename) {
-        Gson gson = new Gson();
+    public void fromFile(String path, String filename) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Rule.class, new RuleTypeAdapter().nullSafe())
+                .create();
+        File file = new File(path + filename + ".proof");
+        FileReader input;
         try {
-            FileReader input = new FileReader(filename + ".proof");
-            mainProof = gson.fromJson(input, Proof.class);
+            input = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        mainProof = gson.fromJson(input, Proof.class);
+        try {
             input.close();
-        } catch (Exception e) {
-            throw new RuntimeException();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -77,24 +87,37 @@ public class NaturalDeduction {
         return ruleInstance.getNumPremises();
     }
 
-    public void assume(Formula assumption){
+    public void close() {
+        mainProof.close();
+    }
+
+    public boolean isNotClosed() {
+        return mainProof.isNotClosed();
+    }
+
+    public void assume(Formula assumption) {
         mainProof.assume(assumption);
     }
-    public boolean belongsToClosedProof(int linenumber){
+
+    public boolean belongsToClosedProof(int linenumber) {
         return mainProof.belongsToClosedProof(linenumber);
     }
-    public String getResult(){
+
+    public String getResult() {
         return mainProof.getResult();
     }
+
     public List<Rule> getRuleList() { //returns list of rules, sorted by name
         return ruleMap.keySet()
                 .stream().sorted()
                 .map(ruleMap::get).collect(Collectors.toList());
     }
+
     public void displayRules() {
         getRuleList().stream().map(ruleInstance -> ruleInstance.getRuleName() + ":\n" + ruleInstance.getSchema() + "\n").forEach(System.out::println);
     }
-    public void printProof(){
+
+    public void printProof() {
         System.out.println(mainProof);
     }
 }

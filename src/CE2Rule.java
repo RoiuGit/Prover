@@ -3,7 +3,7 @@ import java.util.Objects;
 
 public class CE2Rule extends Rule {
 
-    CE2Rule() {
+    public CE2Rule() {
         numPremises = 1;
         ruleName = "CE2";
         schema = """

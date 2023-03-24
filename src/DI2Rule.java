@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DI2Rule extends Rule {
-    DI2Rule() {
+    public DI2Rule() {
         numPremises = 1;
         ruleName = "DI2";
         schema = """

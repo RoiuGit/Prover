@@ -2,7 +2,7 @@ import java.util.List;
 
 public class DERule extends Rule {
 
-    DERule() {
+    public DERule() {
         numPremises = 2;
         ruleName = "DE";
         schema = """

@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class NERule extends Rule {
-    NERule() {
+    public NERule() {
         numPremises = 1;
         ruleName = "NE";
         schema = """

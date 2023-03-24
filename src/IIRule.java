@@ -2,7 +2,7 @@ import java.util.List;
 
 public class IIRule extends Rule {
 
-    IIRule() {
+    public IIRule() {
         numPremises = 1;
         ruleName = "II";
         schema = """

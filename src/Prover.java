@@ -1,10 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.File;
+import java.util.*;
 
 
 public class Prover implements Runnable {
-
+    private final String path = "C:\\Users\\puzik\\IdeaProjects\\Prover\\proofs\\";
     private final Scanner scn = new Scanner(System.in);
     private final NaturalDeduction nd = new NaturalDeduction();
 
@@ -35,7 +34,7 @@ public class Prover implements Runnable {
         return premises;
     }
 
-    private void promptForAssumption(){
+    private void promptForAssumption() {
         while (true) {
             System.out.print("Enter the assumption: ");
             try {
@@ -46,42 +45,72 @@ public class Prover implements Runnable {
             }
         }
     }
-    private void promptForSave(){
+
+    private void promptForSave() {
         while (true) {
             System.out.print("Enter the filename: ");
             try {
-                nd.toFile(scn.nextLine());
+                nd.toFile(path, scn.nextLine());
                 break;
             } catch (Exception e) {
-                System.out.println("Error creating the proof file. Try again.");
+                System.out.println("Error saving file. Try again.");
             }
         }
     }
-    private void endProofSession(){
+
+    private boolean promptForLoad() {
+        while (true) {
+            System.out.print("Do you want to load an existing proof? (Y/N): ");
+            String input = scn.nextLine();
+            if (input.equalsIgnoreCase("Y")) {
+                File dir = new File(path);
+                System.out.println("Choose a file to load:");
+                Arrays.stream(Objects.requireNonNull(dir.listFiles()))
+                        .map(File::getName)
+                        .forEach(filename -> System.out.println(filename.replaceAll(".proof", "")));
+                try {
+                    nd.fromFile(path, scn.nextLine());
+                    return true;
+                } catch (Exception e) {
+                    System.out.println("Error loading file. Try again.");
+                }
+            } else if (input.equalsIgnoreCase("N")) {
+                return false;
+            }
+        }
+    }
+
+    private void endProofSession() {
         nd.printProof();
         String result = nd.getResult();
         if (result != null) {
             System.out.println(result);
+            nd.close();
             while (true) {
                 System.out.print("Save the proof? (Y/N): ");
                 String input = scn.nextLine();
-                if (input.equalsIgnoreCase("Y")) promptForSave();
-                else if (input.equalsIgnoreCase("N")) break;
+                if (input.equalsIgnoreCase("Y")) {
+                    promptForSave();
+                    break;
+                } else if (input.equalsIgnoreCase("N")) break;
             }
         } else {
             System.out.println("Could not end the proof. All of the subproofs must be closed.");
         }
     }
-    private String promptForRule(){
+
+    private String promptForRule() {
         System.out.print("""
-                    Enter the rule you want to apply,
-                    -or enter "ASSUME" to add an assumption,
-                    -or enter "END" to end proof,
-                    -or enter "SAVE" to save the proof:
-                    """);
+                Enter:
+                -the rule you want to apply,
+                -"ASSUME" to add an assumption,
+                -"END" to end the proof and exit,
+                -"SAVE" to save the unfinished proof and exit:
+                """);
         return scn.nextLine().toUpperCase();
     }
-    private void applyRule(String rule){
+
+    private void applyRule(String rule) {
         List<Integer> premisesIndexes = new ArrayList<>();
         int numPremisesForRule;
         try {
@@ -111,10 +140,15 @@ public class Prover implements Runnable {
             System.out.println("Failed to apply rule " + rule + ". Please try again.");
         }
     }
+
     private void runProofSession() {
         String rule;
         mainLoop:
         while (true) { // Main loop.
+            if (!nd.isNotClosed()) {
+                endProofSession();
+                break;
+            }
             nd.printProof();
             rule = promptForRule();
             switch (rule) {
@@ -126,7 +160,7 @@ public class Prover implements Runnable {
                     continue;
                 case "SAVE":
                     promptForSave();
-                    continue;
+                    break;
                 default:
                     applyRule(rule);
             }
@@ -134,8 +168,9 @@ public class Prover implements Runnable {
     }
 
     public void run() {
+        new File(path).mkdirs();
         nd.displayRules();
-        nd.setMainProof(promptForPremises());
+        if (!promptForLoad()) nd.setMainProof(promptForPremises());
         runProofSession();
     }
 }
