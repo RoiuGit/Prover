@@ -1,14 +1,19 @@
-import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class NaturalDeduction {
-    private final Map<String, Rule> ruleMap;
+    private final Map<String, Rule> ruleMap = new HashMap<>();
+    private Proof mainProof;
 
     NaturalDeduction() {
-        ruleMap = new HashMap<>();
         putRule(new IERule());
         putRule(new IIRule());
         putRule(new CE1Rule());
@@ -21,22 +26,50 @@ public class NaturalDeduction {
         putRule(new DI2Rule());
     }
 
+    public void setMainProof(Proof mainProof) {
+        this.mainProof = mainProof;
+    }
+
     private void putRule(Rule rule) {
         this.ruleMap.put(rule.getRuleName(), rule);
     }
 
-    public void applyRule(String rule, List<Integer> premisesIndexes, Proof proof) {
-        List<Formula> premises = new ArrayList<>();
-        Rule ruleInstance = ruleMap.get(rule.toUpperCase());
-        for (Integer premisesIndex : premisesIndexes) {
-            premises.add(proof.getFormula(premisesIndex - proof.getStartingIndex()));
-        }
-        Formula result = ruleInstance.applyRule(premises, proof);
+    public void applyRule(String rule, List<Integer> premisesIndexes) {
+        Rule ruleInstance = ruleMap.get(rule);
+        List<Formula> premises = readPremises(premisesIndexes);
+        Formula result = ruleInstance.applyRule(premises, mainProof);
         if (result != null) {
-            proof.append(new ProofStep(proof.getEndingIndex() + 1, premisesIndexes, premises, result, ruleInstance));
+            mainProof.append(new ProofStep(mainProof.getEndingIndex() + 1, premisesIndexes, premises, result, ruleInstance));
         } else {
             throw new IllegalArgumentException();
         }
+    }
+
+    public void toFile(String filename) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(mainProof);
+        try {
+            FileWriter output = new FileWriter(filename + ".proof");
+            output.write(json);
+            output.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void fromFile(String filename) {
+        Gson gson = new Gson();
+        try {
+            FileReader input = new FileReader(filename + ".proof");
+            mainProof = gson.fromJson(input, Proof.class);
+            input.close();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+    }
+
+    private List<Formula> readPremises(List<Integer> indexes) {
+        return indexes.stream().map(index -> mainProof.getFormula(index - mainProof.getStartingIndex())).collect(Collectors.toList());
     }
 
     public int getNumPremises(String rule) {
@@ -44,7 +77,7 @@ public class NaturalDeduction {
         return ruleInstance.getNumPremises();
     }
 
-    public List<Rule> getRuleList(){ //returns list of rules, sorted by name
+    public List<Rule> getRuleList() { //returns list of rules, sorted by name
         return ruleMap.keySet()
                 .stream().sorted()
                 .map(ruleMap::get).collect(Collectors.toList());
