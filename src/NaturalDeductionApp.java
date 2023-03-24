@@ -31,33 +31,68 @@ public class NaturalDeductionApp {
                 premises.add(new Formula(scn.nextLine()));
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid formula. Please try again.");
+                i--;
             }
         }
         Proof proof = new Proof(premises);
+        nd.setMainProof(proof);
         String rule;
         List<Integer> premisesIndexes = new ArrayList<>();
         while (true) { // Main loop.
             premisesIndexes.clear();
             System.out.println(proof);
-            System.out.print("Enter the rule you want to apply, enter \"ASSUME\" to add an assumption, or enter \"END\" to end proof: ");
-            rule = scn.nextLine();
+            System.out.print("""
+                    Enter the rule you want to apply,
+                    -or enter "ASSUME" to add an assumption,
+                    -or enter "END" to end proof,
+                    -or enter "SAVE" to save the proof:
+                    """);
+            rule = scn.nextLine().toUpperCase();
             // If user finishes proof, print the proof again and print the result ([premises list] => last formula)
-            if (rule.equalsIgnoreCase("END")) {
+            if (rule.equals("END")) {
                 System.out.println(proof);
                 String result = proof.getResult();
                 if (result != null) {
                     System.out.println(result);
+                    while (true) {
+                        System.out.print("Save the proof? (Y/N): ");
+                        String input = scn.nextLine();
+                        if (input.equalsIgnoreCase("Y")) {
+                            System.out.print("Write the filename: ");
+                            try {
+                                nd.toFile(scn.nextLine());
+                                break;
+                            } catch (Exception e) {
+                                System.out.println("Error creating the proof file.");
+                            }
+                        } else if (input.equalsIgnoreCase("N")) break;
+                    }
                     break;
-                }
-                else {
-                    System.out.println("Could not end the result. All of the subproofs must be closed.");
+                } else {
+                    System.out.println("Could not end the proof. All of the subproofs must be closed.");
                     continue;
                 }
             }
 
-            if (rule.equalsIgnoreCase("ASSUME")) {
+            if (rule.equals("ASSUME")) {
                 System.out.print("Enter the assumption: ");
-                proof.assume(new Formula(scn.nextLine()));
+                try {
+                    proof.assume(new Formula(scn.nextLine()));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid formula. Please try again.");
+                }
+                continue;
+            }
+            if (rule.equals("SAVE")) {
+                while (true) {
+                    System.out.print("Enter the filename: ");
+                    try {
+                        nd.toFile(scn.nextLine());
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Error creating the proof file.");
+                    }
+                }
                 continue;
             }
             int numPremisesForRule;
@@ -83,8 +118,8 @@ public class NaturalDeductionApp {
                 }
             }
             try {
-                nd.applyRule(rule, premisesIndexes, proof);
-            } catch (IllegalArgumentException e) {
+                nd.applyRule(rule, premisesIndexes);
+            } catch (Exception e) {
                 System.out.println("Failed to apply rule " + rule + ". Please try again.");
             }
         }
