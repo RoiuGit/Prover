@@ -26,8 +26,8 @@ public class NaturalDeduction {
         putRule(new DI2Rule());
     }
 
-    public void setMainProof(Proof mainProof) {
-        this.mainProof = mainProof;
+    public void setMainProof(List<Formula> premises) {
+        this.mainProof = new Proof(premises);
     }
 
     private void putRule(Rule rule) {
@@ -77,9 +77,24 @@ public class NaturalDeduction {
         return ruleInstance.getNumPremises();
     }
 
+    public void assume(Formula assumption){
+        mainProof.assume(assumption);
+    }
+    public boolean belongsToClosedProof(int linenumber){
+        return mainProof.belongsToClosedProof(linenumber);
+    }
+    public String getResult(){
+        return mainProof.getResult();
+    }
     public List<Rule> getRuleList() { //returns list of rules, sorted by name
         return ruleMap.keySet()
                 .stream().sorted()
                 .map(ruleMap::get).collect(Collectors.toList());
+    }
+    public void displayRules() {
+        getRuleList().stream().map(ruleInstance -> ruleInstance.getRuleName() + ":\n" + ruleInstance.getSchema() + "\n").forEach(System.out::println);
+    }
+    public void printProof(){
+        System.out.println(mainProof);
     }
 }
