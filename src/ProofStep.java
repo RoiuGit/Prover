@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -7,15 +7,14 @@ import java.util.stream.Collectors;
 public class ProofStep {
     private final int index;
     private final Formula formula;
+    private final Map<Integer, Formula> premises = new LinkedHashMap<>();
     private Rule ruleApplied;
-    private Map<Integer, Formula> premises;
     private boolean isPremise;
     private boolean isAssumption;
 
     ProofStep(int index, List<Integer> premisesIndexes, List<Formula> premises, Formula formula, Rule ruleApplied) {
         this.index = index;
-        this.premises = new HashMap<>();
-        for (int i = 0; i < premises.size(); i++){
+        for (int i = 0; i < premises.size(); i++) {
             this.premises.put(premisesIndexes.get(i), premises.get(i));
         }
         this.formula = formula;
@@ -58,4 +57,5 @@ public class ProofStep {
     public int getIndex() {
         return index;
     }
+
 }
