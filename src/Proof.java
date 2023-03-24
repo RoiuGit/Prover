@@ -1,30 +1,29 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Proof {
-    final List<Proof> subProofList = new ArrayList<>();
+    private final List<Proof> subProofList = new ArrayList<>();
     private final int assumptionDepth;
     private final int startingIndex;
-    List<ProofStep> proofSteps;
-    List<Formula> premises;
-    Proof subProof;
+    private final List<ProofStep> proofSteps = new ArrayList<>();
+    private final List<Formula> premises = new ArrayList<>();
+    private Proof subProof;
     private int endingIndex;
     private boolean isClosed;
 
-    Proof(List<Formula> proofSteps) {
-        premises = new ArrayList<>();
-        premises.addAll(proofSteps);
-        this.proofSteps = new ArrayList<>();
-        this.proofSteps = ProofStep.toSteps(proofSteps);
+    Proof(List<Formula> premises) {
+        this.premises.addAll(premises);
+        this.proofSteps.addAll(ProofStep.toSteps(premises));
         this.startingIndex = 1;
-        endingIndex = 1 + proofSteps.size() - 1;
+        endingIndex = premises.size();
         this.assumptionDepth = 0;
         isClosed = false;
     }
 
     Proof(int assumptionDepth, int startingIndex) {
-        proofSteps = new ArrayList<>();
         this.startingIndex = startingIndex;
         endingIndex = startingIndex - 1;
         this.assumptionDepth = assumptionDepth;
@@ -60,7 +59,7 @@ public class Proof {
         return result.toString();
     }
 
-    private int getLineAssumptionDepth(int lineNumber) {
+    public int getLineAssumptionDepth(int lineNumber) {
         int depth = 0;
         for (Proof sp : subProofList) {
             if (lineNumber >= sp.startingIndex && lineNumber <= sp.endingIndex) {
@@ -116,18 +115,16 @@ public class Proof {
         return endingIndex;
     }
 
-    public int size() {
-        return proofSteps.size();
-    }
-
     public String toString() {
         StringBuilder proof = new StringBuilder();
+        int numberFormat = Integer.toString(getEndingIndex()).length();
+        Optional<Integer> maxFormulaLength = proofSteps.stream().map(ProofStep::getFormula).map(Formula::toString).map(String::length).max(Integer::compareTo);
+        Optional<Integer> maxDepth = IntStream.rangeClosed(startingIndex, endingIndex).boxed().toList().stream().map(this::getLineAssumptionDepth).max(Integer::compareTo);
+        int formulaFormat = maxFormulaLength.orElse(10) + maxDepth.orElse(0) + 1;
         for (ProofStep proofStep : proofSteps) {
-            proof.append(proofStep.getIndex()).append(".");
+            proof.append(("%" + numberFormat + "d.").formatted(proofStep.getIndex()));
             int depth = getLineAssumptionDepth(proofStep.getIndex());
-            proof.append("|".repeat(Math.max(0, depth)));
-            proof.append(" ");
-            proof.append(proofStep.getFormula()).append(proofStep.getAnnotation()).append("\n");
+            proof.append(("%-" + formulaFormat + "s %s\n").formatted("|".repeat(Math.max(0, depth)) + " " + proofStep.getFormula(), proofStep.getAnnotation()));
         }
 
         return proof.toString();
